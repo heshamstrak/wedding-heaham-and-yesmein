@@ -137,7 +137,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--navy);font-fam
 .card::before{
   content:'';position:absolute;inset:-1px;border-radius:14px;
   background:conic-gradient(from 0deg,var(--gold),var(--cyan),var(--gold),var(--med),var(--rose),var(--gold));
-  opacity:.08;animation:spinBorder 15s linear infinite;z-index:-1;
+  opacity:.05;animation:spinBorder 15s linear infinite;z-index:-1;
 }
 @keyframes spinBorder{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 .card::after{
@@ -229,7 +229,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--navy);font-fam
   letter-spacing:.65em;color:var(--gold);text-transform:uppercase;opacity:.8;margin-bottom:1.2rem;
 }
 .big-date{
-  font-family:'Cinzel',serif;font-size:clamp(2rem,9vw,5.5rem);font-weight:700;
+  font-family:'Cinzel',serif;font-size:clamp(2rem,9vw,5.0rem);font-weight:700;
   background:linear-gradient(135deg,var(--gold-lt),var(--gold),#9A7200);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
   filter:drop-shadow(0 0 28px rgba(212,175,55,.7));letter-spacing:.04em;line-height:1;
