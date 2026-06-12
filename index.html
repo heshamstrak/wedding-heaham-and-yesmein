@@ -190,9 +190,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--navy);font-fam
   filter:drop-shadow(0 0 22px rgba(212,175,55,.9));
 }
 .groom-n{
-  background:linear-gradient(135deg,#0099cc,#006fa8,#004d80);
+  background:linear-gradient(135deg,#80EEFF,#00D4FF,#0099CC);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  filter:drop-shadow(0 0 14px rgba(0,130,184,.5));
+  filter:drop-shadow(0 2px 6px rgba(0,80,150,.28));
 }
 .heart-sym{
   display:block;font-size:clamp(1.4rem,4vw,2.2rem);color:var(--rose);
@@ -436,7 +436,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--navy);font-fam
   font-weight:700;line-height:1;
 }
 .gold-yr{background:linear-gradient(135deg,var(--gold-lt),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 14px rgba(212,175,55,.75))}
-.cyan-yr{background:linear-gradient(135deg,var(--cyan),#004d80);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 10px rgba(0,130,184,.45))}
+.cyan-yr{background:linear-gradient(135deg,var(--cyan),#003d75);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 1px 4px rgba(0,80,150,.22))}
 .rose-yr{background:linear-gradient(135deg,#FFB3CF,var(--rose));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 14px rgba(255,77,138,.75))}
 .tl-ev{
   font-family:'Cormorant Garamond',serif;font-size:clamp(.95rem,2.8vw,1.15rem);
@@ -513,6 +513,77 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--navy);font-fam
   #bgCanvas{opacity:.4}
   .rev{opacity:1;transform:none;transition:none}
   .rev.vis{opacity:1;transform:none}
+}
+
+/* ════ THEME TOGGLE BUTTON ════ */
+#themeToggle{
+  position:fixed;top:.85rem;right:.85rem;z-index:200;
+  width:38px;height:38px;border-radius:50%;
+  background:rgba(255,253,248,.92);border:1px solid rgba(160,120,40,.28);
+  font-size:1rem;cursor:pointer;line-height:1;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 10px rgba(0,0,0,.1);
+  transition:background .35s,border-color .35s,transform .2s;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+html[data-theme="dark"] #themeToggle{
+  background:rgba(4,12,30,.88);border-color:rgba(212,175,55,.3);
+  box-shadow:0 2px 10px rgba(0,0,0,.45);
+}
+#themeToggle:hover{transform:scale(1.12) rotate(15deg)}
+
+/* ════ DARK MODE OVERRIDES ════ */
+html[data-theme="dark"],html[data-theme="dark"] body{color:#fff}
+html[data-theme="dark"]{
+  --gold:#D4AF37;--gold-lt:#F5E070;--gold-dk:#7B5A00;
+  --navy:#020913;--navy2:#06142A;
+  --cyan:#00D4FF;--cyan2:rgba(0,212,255,.5);
+  --med:#00FF88;--rose:#FF4D8A;--code:#7DF9FF;
+}
+html[data-theme="dark"] .env-body{background:linear-gradient(150deg,#120D25 0%,#0A0C1E 50%,#080C1A 100%);border-color:rgba(212,175,55,.35)}
+html[data-theme="dark"] .env-bl{background:linear-gradient(to bottom-right,transparent 50%,#0D1022 50%);border-right-color:rgba(212,175,55,.15)}
+html[data-theme="dark"] .env-br{background:linear-gradient(to bottom-left,transparent 50%,#0D1022 50%);border-left-color:rgba(212,175,55,.15)}
+html[data-theme="dark"] .env-flap{background:linear-gradient(to bottom,#1A1130 0%,#0E0C24 60%,#0A0E1E 100%);border-color:rgba(212,175,55,.3)}
+html[data-theme="dark"] .card{background:rgba(4,12,30,.78);border-color:rgba(212,175,55,.18);box-shadow:none}
+html[data-theme="dark"] .card::after{background:radial-gradient(ellipse at 50% 0%,rgba(212,175,55,.06) 0%,transparent 55%),radial-gradient(ellipse at 50% 100%,rgba(0,212,255,.04) 0%,transparent 55%)}
+html[data-theme="dark"] .tagline{color:rgba(255,255,255,.62)}
+html[data-theme="dark"] .groom-n{filter:drop-shadow(0 0 22px rgba(0,212,255,.9))}
+html[data-theme="dark"] .couple-roles{color:rgba(255,255,255,.42)}
+html[data-theme="dark"] #hbCanvas{background:rgba(0,6,2,.45);border:none}
+html[data-theme="dark"] .holo-lbl{color:rgba(255,255,255,.35)}
+html[data-theme="dark"] .code-panel{background:rgba(0,0,0,.35);border-color:rgba(0,212,255,.18);box-shadow:none}
+html[data-theme="dark"] .code-ln .kw{color:#FF79C6}
+html[data-theme="dark"] .code-ln .str{color:#F1FA8C}
+html[data-theme="dark"] .code-ln .fn{color:#8BE9FD}
+html[data-theme="dark"] .code-ln .vl{color:#BD93F9}
+html[data-theme="dark"] .code-ln .cm{color:rgba(255,255,255,.28)}
+html[data-theme="dark"] .venue-nm{color:rgba(255,255,255,.78)}
+html[data-theme="dark"] .venue-city{color:rgba(255,255,255,.35)}
+html[data-theme="dark"] .venue-hall{color:rgba(255,255,255,.85);text-shadow:0 0 20px rgba(212,175,55,.28)}
+html[data-theme="dark"] .venue-at{color:rgba(255,255,255,.26)}
+html[data-theme="dark"] .cd-lbl{color:rgba(255,255,255,.32)}
+html[data-theme="dark"] .closing p{color:rgba(255,255,255,.55)}
+html[data-theme="dark"] .btn::before{background:rgba(255,255,255,.12)}
+html[data-theme="dark"] .btn-gold{color:var(--navy);box-shadow:0 0 18px rgba(212,175,55,.4),0 4px 14px rgba(0,0,0,.3)}
+html[data-theme="dark"] #modal{background:rgba(2,9,19,.88)}
+html[data-theme="dark"] .modal-box{background:rgba(4,12,30,.96);border-color:rgba(212,175,55,.28)}
+html[data-theme="dark"] .modal-msg{color:rgba(255,255,255,.82)}
+html[data-theme="dark"] .audio-bar{background:rgba(4,12,30,.92);border-color:rgba(212,175,55,.18);box-shadow:none}
+html[data-theme="dark"] .tl-ev{color:rgba(255,255,255,.58)}
+html[data-theme="dark"] .tl-arr{color:rgba(255,255,255,.18)}
+html[data-theme="dark"] .tl-prog-wrap{background:rgba(255,255,255,.07)}
+html[data-theme="dark"] .tl-sub{color:rgba(255,255,255,.2)}
+html[data-theme="dark"] .cyan-yr{filter:drop-shadow(0 0 14px rgba(0,212,255,.8))}
+html[data-theme="dark"] .rsvp-field label{color:rgba(255,255,255,.3)}
+html[data-theme="dark"] .rsvp-input{background:rgba(255,255,255,.04);border-color:rgba(212,175,55,.18);color:#fff}
+html[data-theme="dark"] .rsvp-input:focus{border-color:rgba(212,175,55,.48)}
+html[data-theme="dark"] .rsvp-input::placeholder{color:rgba(255,255,255,.22)}
+@media(max-width:768px){
+  html[data-theme="dark"] #timelineScreen{background:#020913}
+  html[data-theme="dark"] #envelopeScreen{background:#020913}
+  html[data-theme="dark"] .card{box-shadow:0 0 30px rgba(212,175,55,.05),0 10px 40px rgba(0,0,0,.25)}
+  html[data-theme="dark"] .env-wrap{filter:drop-shadow(0 0 14px rgba(212,175,55,.35)) drop-shadow(0 0 35px rgba(0,212,255,.07))}
+  html[data-theme="dark"] .env-wrap:hover{filter:drop-shadow(0 0 24px rgba(212,175,55,.55)) drop-shadow(0 0 45px rgba(0,212,255,.16))}
 }
 
 /* ════ RSVP FORM (inside modal) ════ */
@@ -764,6 +835,8 @@ input[type=number].rsvp-input{text-align:center}
 
 <audio id="audio" loop></audio>
 
+<button id="themeToggle" onclick="toggleTheme()" title="Toggle theme" aria-label="Toggle dark/light mode">🌙</button>
+
 <script>
 /* ═══════════════════════════════════
    EDIT HERE
@@ -777,6 +850,16 @@ const LOCATION_URL = "https://www.google.com/maps/place/Dar+ElAsleha+w+ElZakhira
 
 /* Set to your deployed backend URL, e.g. 'https://wedding-backend.railway.app' */
 const API_URL = 'https://wedding-backend-heaham-and-yasmein-production.up.railway.app';
+
+/* ── Theme ── */
+let _darkMode = localStorage.getItem('wt') === 'dark';
+function applyTheme(){
+  document.documentElement.dataset.theme = _darkMode ? 'dark' : 'light';
+  const btn = document.getElementById('themeToggle');
+  if(btn) btn.textContent = _darkMode ? '☀️' : '🌙';
+}
+function toggleTheme(){ _darkMode=!_darkMode; localStorage.setItem('wt',_darkMode?'dark':'light'); applyTheme(); }
+applyTheme();
 
 /* ── Populate ── */
 document.getElementById('jsB').textContent  = brideName;
@@ -857,13 +940,13 @@ function draw(ts){
   cx.clearRect(0,0,cvs.width,cvs.height);
 
   for(const s of stars){
-    cx.globalAlpha = .12 + .48*(0.5+0.5*Math.sin(s.phase+ts*.001*s.spd*200));
-    cx.fillStyle='rgba(30,20,60,.8)';
+    cx.globalAlpha = _darkMode ? .22+.78*(0.5+0.5*Math.sin(s.phase+ts*.001*s.spd*200)) : .12+.48*(0.5+0.5*Math.sin(s.phase+ts*.001*s.spd*200));
+    cx.fillStyle = _darkMode ? '#fff' : 'rgba(30,20,60,.8)';
     cx.beginPath(); cx.arc(s.x,s.y,s.r,0,Math.PI*2); cx.fill();
   }
 
   const g = cx.createRadialGradient(cvs.width*.5,cvs.height*.25,0,cvs.width*.5,cvs.height*.25,cvs.width*.45);
-  g.addColorStop(0,'rgba(200,168,80,.07)'); g.addColorStop(1,'transparent');
+  g.addColorStop(0,_darkMode?'rgba(0,20,60,.18)':'rgba(200,168,80,.07)'); g.addColorStop(1,'transparent');
   cx.globalAlpha=1; cx.fillStyle=g; cx.fillRect(0,0,cvs.width,cvs.height);
 
   if(!_mob || window.innerWidth > 480){
@@ -1004,13 +1087,14 @@ function startHeartbeat(){
 
     hx.clearRect(0, 0, W, H);
 
-    hx.strokeStyle = 'rgba(0,153,85,.07)';
+    const _ecgCol = _darkMode ? '#00FF88' : '#009955';
+    hx.strokeStyle = _darkMode ? 'rgba(0,255,136,.045)' : 'rgba(0,153,85,.07)';
     hx.lineWidth = .5;
     for(let x = 0; x < W; x += 24){ hx.beginPath(); hx.moveTo(x,0); hx.lineTo(x,H); hx.stroke(); }
     for(let y = 0; y < H; y += 18){ hx.beginPath(); hx.moveTo(0,y); hx.lineTo(W,y); hx.stroke(); }
 
-    hx.globalAlpha = .22;
-    hx.strokeStyle = '#009955';
+    hx.globalAlpha = _darkMode ? .18 : .22;
+    hx.strokeStyle = _ecgCol;
     hx.lineWidth = 1.5;
     hx.beginPath();
     for(let x = 0; x < W; x++){
@@ -1021,8 +1105,8 @@ function startHeartbeat(){
     hx.globalAlpha = 1;
 
     hx.shadowBlur  = ECG_BLUR;
-    hx.shadowColor = '#009955';
-    hx.strokeStyle = '#009955';
+    hx.shadowColor = _ecgCol;
+    hx.strokeStyle = _ecgCol;
     hx.lineWidth   = ECG_LW;
     hx.lineJoin    = 'round';
     hx.lineCap     = 'round';
@@ -1036,15 +1120,17 @@ function startHeartbeat(){
 
     const penX   = W - 62;
     const penY   = mid - buf[penX] * (H * .40);
+    const _ecgBg0 = _darkMode ? 'rgba(3,9,20,0)' : 'rgba(236,246,238,0)';
+    const _ecgBg1 = _darkMode ? 'rgba(3,9,20,.97)' : 'rgba(236,246,238,.97)';
     const fadeG  = hx.createLinearGradient(penX, 0, W, 0);
-    fadeG.addColorStop(0, 'rgba(236,246,238,0)');
-    fadeG.addColorStop(1, 'rgba(236,246,238,.97)');
+    fadeG.addColorStop(0, _ecgBg0);
+    fadeG.addColorStop(1, _ecgBg1);
     hx.fillStyle = fadeG;
     hx.fillRect(penX, 0, W - penX, H);
 
     hx.shadowBlur  = ECG_BLUR * 1.5;
-    hx.shadowColor = '#009955';
-    hx.fillStyle   = '#006633';
+    hx.shadowColor = _ecgCol;
+    hx.fillStyle   = _darkMode ? '#FFFFFF' : '#006633';
     hx.beginPath();
     hx.arc(penX, penY, ECG_DOT, 0, Math.PI * 2);
     hx.fill();
