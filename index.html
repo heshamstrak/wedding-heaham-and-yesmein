@@ -467,6 +467,10 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--navy);font-fam
 
 /* ════ MOBILE PERFORMANCE ════ */
 @media(max-width:768px){
+  /* Block canvas compositing behind timeline — biggest perf win on mobile */
+  #timelineScreen{background:#020913}
+  #envelopeScreen{background:#020913}
+
   /* Blur: reduce by 70% (keep 30%) */
   .card{backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px)}
   #modal{backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
@@ -752,7 +756,7 @@ resize(); window.addEventListener('resize', resize);
 const _mob = window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
 const _prefersLess = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
 let _lastFrame = 0, _isVisible = true;
-const _frameMs = _prefersLess ? 0 : 1000 / 30;
+let _bgMs = _prefersLess ? 0 : 1000 / 30;
 document.addEventListener('visibilitychange', () => { _isVisible = !document.hidden; });
 
 const stars = Array.from({length: _mob ? 50 : 80}, () => ({
@@ -799,7 +803,7 @@ let invReady = false;
 
 function draw(ts){
   requestAnimationFrame(draw);
-  if(!_isVisible || ts - _lastFrame < _frameMs) return;
+  if(!_isVisible || ts - _lastFrame < _bgMs) return;
   _lastFrame = ts;
 
   cx.clearRect(0,0,cvs.width,cvs.height);
@@ -852,6 +856,7 @@ function openEnvelope(){
 }
 
 function showTimeline(){
+  if(_mob) _bgMs = 1000/5;   // near-freeze canvas while timeline plays on mobile
   const tls = document.getElementById('timelineScreen');
   tls.classList.add('show');
 
@@ -872,6 +877,7 @@ function showTimeline(){
 
   setTimeout(()=>{
     tls.classList.remove('show'); tls.classList.add('hide');
+    if(_mob) _bgMs = 1000/30;  // restore canvas to 30fps for invitation
     setTimeout(()=>{
       document.getElementById('invitationScreen').classList.add('show');
       document.getElementById('audioBar').classList.add('show');
