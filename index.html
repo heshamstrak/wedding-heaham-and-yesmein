@@ -464,6 +464,49 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--navy);font-fam
   opacity:0;transition:opacity .5s ease;
 }
 .tl-sub.show{opacity:1}
+
+/* ════ MOBILE PERFORMANCE ════ */
+@media(max-width:768px){
+  /* Blur: reduce by 70% (keep 30%) */
+  .card{backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px)}
+  #modal{backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+  .audio-bar{backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+
+  /* Glow/shadow: reduce by 50% */
+  .env-wrap{
+    filter:drop-shadow(0 0 14px rgba(212,175,55,.35)) drop-shadow(0 0 35px rgba(0,212,255,.07));
+  }
+  .env-wrap:hover{
+    filter:drop-shadow(0 0 24px rgba(212,175,55,.55)) drop-shadow(0 0 45px rgba(0,212,255,.16));
+  }
+  .seal-outer{
+    box-shadow:0 0 9px rgba(192,57,43,.6),0 0 20px rgba(192,57,43,.28);
+    animation:none;
+  }
+  .btn-gold{box-shadow:0 0 9px rgba(212,175,55,.3),0 2px 7px rgba(0,0,0,.3)}
+  .btn-gold:hover{box-shadow:0 0 18px rgba(212,175,55,.5),0 4px 11px rgba(0,0,0,.35)}
+  .card{box-shadow:0 0 30px rgba(212,175,55,.05),0 10px 40px rgba(0,0,0,.25)}
+
+  /* Reduce CSS animation cost */
+  .card::before{animation:none;opacity:.06}
+  @keyframes spinBorder{}
+  .tl-dot{animation:none}
+  @keyframes tlPulse{}
+  .seal-outer{animation:none}
+  @keyframes sealPulse{}
+}
+
+/* ════ REDUCED MOTION ════ */
+@media(prefers-reduced-motion:reduce){
+  *{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.2s !important;
+  }
+  #bgCanvas{opacity:.4}
+  .rev{opacity:1;transform:none;transition:none}
+  .rev.vis{opacity:1;transform:none}
+}
 </style>
 </head>
 <body>
@@ -705,7 +748,14 @@ const cx  = cvs.getContext('2d');
 function resize(){ cvs.width = innerWidth; cvs.height = innerHeight; }
 resize(); window.addEventListener('resize', resize);
 
-const stars = Array.from({length:220}, () => ({
+/* ── Mobile optimisation ── */
+const _mob = window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+const _prefersLess = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+let _lastFrame = 0, _isVisible = true;
+const _frameMs = _prefersLess ? 0 : 1000 / 30;
+document.addEventListener('visibilitychange', () => { _isVisible = !document.hidden; });
+
+const stars = Array.from({length: _mob ? 50 : 80}, () => ({
   x: Math.random()*innerWidth, y: Math.random()*innerHeight,
   r: Math.random()*1.4+.2, phase: Math.random()*Math.PI*2,
   spd: Math.random()*.005+.002
@@ -722,9 +772,9 @@ function mkP(){
     heart: Math.random()<.12
   };
 }
-const parts = Array.from({length:115}, mkP);
+const parts = Array.from({length: _mob ? 20 : 35}, mkP);
 
-const fh = Array.from({length:40}, () => ({
+const fh = Array.from({length: _mob ? 6 : 10}, () => ({
   x: Math.random()*innerWidth,
   y: innerHeight + Math.random()*80,
   sz: Math.random()*7+3,
@@ -747,12 +797,15 @@ function drawHeart(x,y,s,a,col){
 
 let invReady = false;
 
-function draw(t){
+function draw(ts){
   requestAnimationFrame(draw);
+  if(!_isVisible || ts - _lastFrame < _frameMs) return;
+  _lastFrame = ts;
+
   cx.clearRect(0,0,cvs.width,cvs.height);
 
   for(const s of stars){
-    cx.globalAlpha = .22 + .78*(0.5+0.5*Math.sin(s.phase+t*.001*s.spd*200));
+    cx.globalAlpha = .22 + .78*(0.5+0.5*Math.sin(s.phase+ts*.001*s.spd*200));
     cx.fillStyle='#fff';
     cx.beginPath(); cx.arc(s.x,s.y,s.r,0,Math.PI*2); cx.fill();
   }
@@ -761,14 +814,16 @@ function draw(t){
   g.addColorStop(0,'rgba(0,20,60,.18)'); g.addColorStop(1,'transparent');
   cx.globalAlpha=1; cx.fillStyle=g; cx.fillRect(0,0,cvs.width,cvs.height);
 
-  for(const p of parts){
-    p.x+=p.vx; p.y+=p.vy;
-    if(p.y<-20) Object.assign(p,mkP());
-    const fa = p.alpha
-      * Math.min(1,(cvs.height-p.y)/80)
-      * Math.min(1, p.y > cvs.height-60 ? (cvs.height-p.y)/60 : 1);
-    if(p.heart){ drawHeart(p.x,p.y,p.r*1.8,fa); }
-    else{ cx.globalAlpha=fa; cx.fillStyle=p.col; cx.beginPath(); cx.arc(p.x,p.y,p.r,0,Math.PI*2); cx.fill(); }
+  if(!_mob || window.innerWidth > 480){
+    for(const p of parts){
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.y<-20) Object.assign(p,mkP());
+      const fa = p.alpha
+        * Math.min(1,(cvs.height-p.y)/80)
+        * Math.min(1, p.y > cvs.height-60 ? (cvs.height-p.y)/60 : 1);
+      if(p.heart){ drawHeart(p.x,p.y,p.r*1.8,fa); }
+      else{ cx.globalAlpha=fa; cx.fillStyle=p.col; cx.beginPath(); cx.arc(p.x,p.y,p.r,0,Math.PI*2); cx.fill(); }
+    }
   }
 
   if(invReady){
@@ -852,10 +907,15 @@ function startHeartbeat(){
   }
   resize();
 
-  const SPEED = 2;
+  const SPEED = _mob ? 3 : 2;
+  const ECG_BLUR  = _mob ? 10 : 20;
+  const ECG_DOT   = _mob ? 3  : 4.5;
+  const ECG_LW    = _mob ? 2  : 3;
   let phase = 0.35;
   const phPerPx = 1 / (hc.width * 0.58);
   let buf = new Float32Array(hc.width).fill(0);
+  let _ecgLast = 0;
+  const _ecgMs = _mob ? 1000/30 : 0;
 
   function beat(p){
     p = ((p % 1) + 1) % 1;
@@ -871,8 +931,10 @@ function startHeartbeat(){
     return 0;
   }
 
-  function frame(){
+  function frame(ets){
     requestAnimationFrame(frame);
+    if(_mob && ets - _ecgLast < _ecgMs) return;
+    _ecgLast = ets;
 
     const W = hc.width, H = hc.height, mid = H * .50;
 
@@ -904,10 +966,10 @@ function startHeartbeat(){
     hx.stroke();
     hx.globalAlpha = 1;
 
-    hx.shadowBlur  = 20;
+    hx.shadowBlur  = ECG_BLUR;
     hx.shadowColor = '#00FF88';
     hx.strokeStyle = '#00FF88';
-    hx.lineWidth   = 3;
+    hx.lineWidth   = ECG_LW;
     hx.lineJoin    = 'round';
     hx.lineCap     = 'round';
     hx.beginPath();
@@ -926,11 +988,11 @@ function startHeartbeat(){
     hx.fillStyle = fadeG;
     hx.fillRect(penX, 0, W - penX, H);
 
-    hx.shadowBlur  = 30;
+    hx.shadowBlur  = ECG_BLUR * 1.5;
     hx.shadowColor = '#00FF88';
     hx.fillStyle   = '#FFFFFF';
     hx.beginPath();
-    hx.arc(penX, penY, 4.5, 0, Math.PI * 2);
+    hx.arc(penX, penY, ECG_DOT, 0, Math.PI * 2);
     hx.fill();
     hx.shadowBlur = 0;
   }
